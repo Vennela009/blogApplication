@@ -118,9 +118,9 @@
             <p>Name: <span th:text="${comment.name}"></span></p>
             <p>Email: <span th:text="${comment.email}"></span></p>
             <p>Comment: <span th:text="${comment.comment}"></span></p>
-            <div class="comment-actions" sec:authorize="(hasRole('AUTHOR') and #authentication.principal.username.toLowerCase()==#vars.post.author.toLowerCase()) or hasRole('ADMIN')">
+            <div class="comment-actions" sec:authorize="((hasRole('AUTHOR') and #authentication.principal.username.toLowerCase()==#vars.post.author.toLowerCase()) or hasRole('ADMIN'))">
                 <a th:href="@{/posts/{postId}/comment/edit/{id} (postId=${post.id},id=${comment.id})}" ><button>Update the Comment</button></a>
-                <a th:href="@{/posts/{postId}/comment/delete/{id} (postId=${post.id},id=${comment.id})}" onclick="return confirm('Are you sure you want to delete the comment')"><button>Delete the Comment</button></a>
+                <a th:href="@{/posts/{postId}/comment/delete/{id} (postId=${post.id},id=${comment.id})}" ><button>Delete the Comment</button></a>
             </div>
         </li>
     </ul>

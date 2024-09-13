@@ -13,12 +13,12 @@ import java.util.Set;
 @Table(name="Post")
 @Getter
 @Setter
-public class Posts {
+public class    Posts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String title;
 
 
@@ -42,13 +42,13 @@ public class Posts {
     @Column(name="updated_at")
     private  LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy="post", cascade ={CascadeType.PERSIST, CascadeType.MERGE},orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="post", cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Comments> comments;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.EAGER)
     @JoinTable(name="post_tags",
-    joinColumns = @JoinColumn(name="post_id"),
-    inverseJoinColumns = @JoinColumn(name="tag_id"))
+            joinColumns = @JoinColumn(name="post_id"),
+            inverseJoinColumns = @JoinColumn(name="tag_id"))
     private Set<Tags> tags = new HashSet<>();
 
     public Posts(){

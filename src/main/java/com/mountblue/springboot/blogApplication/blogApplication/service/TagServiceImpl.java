@@ -39,38 +39,5 @@ public class TagServiceImpl implements TagService{
         return tagSet;
     }
 
-    @Override
-    public Set<Tags> updateTags(String tags, Long id) {
-        Set<String> newTagNames = Arrays.stream(tags.split(","))
-                .map(String::trim)
-                .collect(Collectors.toSet());
-
-        Posts post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + id));
-
-        Set<Tags> existingTags = new HashSet<>(post.getTags());
-        Set<Tags> updatedTags = new HashSet<>();
-
-        for (String tagName : newTagNames) {
-            Tags tag = tagRepository.findByName(tagName)
-                    .orElseGet(() -> {
-                        Tags newTag = new Tags();
-                        newTag.setName(tagName);
-                        newTag.setCreatedAt(LocalDateTime.now());
-                        return tagRepository.save(newTag);
-                    });
-
-            tag.setUpdatedAt(LocalDateTime.now());
-            updatedTags.add(tag);
-
-        }
-
-        existingTags.removeIf(tag -> !newTagNames.contains(tag.getName()));
-
-        post.setTags(existingTags);
-        postRepository.save(post);
-
-        return updatedTags;
-    }
 
 }

@@ -60,7 +60,7 @@ public class PostServiceImpl implements  PostService{
         existingPost.setTitle(title);
         existingPost.setContent(content);
         existingPost.setUpdatedAt(LocalDateTime.now());
-        Set<Tags> tagsSet = tagService.updateTags(tags,id);
+        Set<Tags> tagsSet = tagService.createTags(tags);
         existingPost.setTags(tagsSet);
 
         postRepository.save(existingPost);

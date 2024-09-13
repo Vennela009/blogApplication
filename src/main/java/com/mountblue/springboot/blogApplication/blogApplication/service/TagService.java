@@ -9,5 +9,4 @@ import java.util.Set;
 public interface TagService {
     Set<Tags> createTags(String tags);
 
-    Set<Tags> updateTags(String tags,Long id);
 }
