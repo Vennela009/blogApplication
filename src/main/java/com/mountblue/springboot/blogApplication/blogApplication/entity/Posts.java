@@ -42,7 +42,7 @@ public class Posts {
     @Column(name="updated_at")
     private  LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy="post", cascade ={CascadeType.PERSIST, CascadeType.MERGE},orphanRemoval = true)
+    @OneToMany(mappedBy="post", cascade ={CascadeType.PERSIST, CascadeType.MERGE},orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Comments> comments;
 
     @ManyToMany(fetch = FetchType.EAGER)
