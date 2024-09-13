@@ -25,38 +25,67 @@ public class SecurityConfig {
         return jdbcUserDetailsManager;
     }
 
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeHttpRequests(configurer->
+//                configurer
+//                        .requestMatchers("/user/new","/user/register","/*/all","/posts/*","/comment/*","/posts/sort/*").permitAll()
+//                        .requestMatchers("/showLoginPage","/*/new","/*/update/**","/*/delete/**").hasAnyRole("ADMIN","AUTHOR")
+//                        .anyRequest().authenticated()
+//                )
+//                .formLogin(form->
+//                        form
+//                                .loginPage("/showLoginPage")
+//                                .loginProcessingUrl("/authenticatedTheUser")
+//                                .defaultSuccessUrl("/posts/all",true)
+//                                .permitAll()
+//                )
+//                .logout(logout ->
+//                        logout
+//                                .logoutUrl("/logout")
+//                                .logoutSuccessUrl("/showLoginPage?logout")
+//                                .deleteCookies("JSESSIONID")
+//                                .invalidateHttpSession(true)
+//                                .permitAll()
+//                )
+//                .exceptionHandling(exceptionHandling ->
+//                        exceptionHandling
+//                                .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/showLoginPage"))
+//                );
+//
+//
+//        return http.build();
+//    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(configurer->
-                configurer
-                        .requestMatchers("/user/new","/user/register","/*/all","/posts/*","/comment/*","/posts/sort/*").permitAll()
-                        .requestMatchers("/showLoginPage","/*/new","/*/update/**","/*/delete/**").hasAnyRole("ADMIN","AUTHOR")
+                .authorizeHttpRequests(configurer -> configurer
+                        .requestMatchers("/user/new", "/user/register", "/*/all", "/posts/*", "/comment/*", "/posts/sort/*","/showLoginPage").permitAll()
+                        .requestMatchers( "/*/new", "/*/update/**", "/*/delete/**").hasAnyRole("ADMIN", "AUTHOR")
                         .anyRequest().authenticated()
                 )
-                .formLogin(form->
-                        form
-                                .loginPage("/showLoginPage")
-                                .loginProcessingUrl("/authenticatedTheUser")
-                                .defaultSuccessUrl("/posts/all",true)
-                                .permitAll()
+                .formLogin(form -> form
+                        .loginPage("/showLoginPage")
+                        .loginProcessingUrl("/authenticatedTheUser")
+                        .defaultSuccessUrl("/posts/all", true)
+                        .permitAll()
                 )
-                .logout(logout ->
-                        logout
-                                .logoutUrl("/logout")
-                                .logoutSuccessUrl("/showLoginPage?logout")
-                                .deleteCookies("JSESSIONID")
-                                .invalidateHttpSession(true)
-                                .permitAll()
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/showLoginPage?logout")
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true)
+                        .permitAll()
                 )
-                .exceptionHandling(exceptionHandling ->
-                        exceptionHandling
-                                .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/showLoginPage"))
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint((request, response, authException) -> response.sendRedirect(request.getContextPath() + "/showLoginPage"))
                 );
-
 
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
