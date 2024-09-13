@@ -45,7 +45,7 @@ public class Posts {
     @OneToMany(mappedBy="post", cascade ={CascadeType.PERSIST, CascadeType.MERGE},orphanRemoval = true)
     private List<Comments> comments;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="post_tags",
     joinColumns = @JoinColumn(name="post_id"),
     inverseJoinColumns = @JoinColumn(name="tag_id"))
