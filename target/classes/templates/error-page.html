@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 50px;
+            text-align: center;
+        }
+        .error-message {
+            color: red;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .error-details {
+            color: #555;
+            font-size: 16px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>Oops! Something went wrong.</h1>
+<p class="error-message" th:text="${message}">An unexpected error occurred.</p>
+<p class="error-details">Please go back and try again, or contact support if the problem persists.</p>
+<a href="/" class="back-link">Go Back to Home</a>
+</body>
+</html>

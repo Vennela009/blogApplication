@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>View Post</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        h1 {
+            margin-top: 0;
+            color: #007bff;
+            font-size: 2em;
+        }
+        h2 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+            color: #555;
+        }
+        p {
+            margin: 0 0 10px;
+            color: #333;
+        }
+        ul {
+            padding-left: 20px;
+            list-style-type: disc;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        input[type="text"], textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+        }
+        input[type="submit"], button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        input[type="submit"]:hover, button:hover {
+            background-color: #0056b3;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+            margin-top: 10px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .comment-actions {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>View Post</h1>
+</header>
+<div class="container">
+    <h1 th:text="${post.title}"></h1>
+
+    <h2>Content</h2>
+    <p th:text="${post.content}"></p>
+
+    <h2>Author</h2>
+    <p th:text="${post.author}"></p>
+
+    <h2>Published DateTime</h2>
+    <p><b>Published At:</b> <span th:text="${#temporals.format(post.publishedAt,'yyyy-MM-dd HH:mm')}"></span></p>
+
+    <h2>Tags</h2>
+    <ul>
+        <li th:each="tag: ${post.tags}">
+            <p th:text="${tag.name}"></p>
+        </li>
+    </ul>
+
+    <h2>Comments</h2>
+    <ul>
+        <li th:each="comment: ${post.comments}">
+            <p>Name: <span th:text="${comment.name}"></span></p>
+            <p>Email: <span th:text="${comment.email}"></span></p>
+            <p>Comment: <span th:text="${comment.comment}"></span></p>
+            <div class="comment-actions" sec:authorize="(hasRole('AUTHOR') and #authentication.principal.username.toLowerCase()==#vars.post.author.toLowerCase()) or hasRole('ADMIN')">
+                <a th:href="@{/posts/{postId}/comment/edit/{id} (postId=${post.id},id=${comment.id})}" ><button>Update the Comment</button></a>
+                <a th:href="@{/posts/{postId}/comment/delete/{id} (postId=${post.id},id=${comment.id})}" onclick="return confirm('Are you sure you want to delete the comment')"><button>Delete the Comment</button></a>
+            </div>
+        </li>
+    </ul>
+
+    <form th:action="@{/comment/{id} (id=${post.id})}" method="post">
+        <label>Name</label>
+        <input type="text" name="name" required />
+
+        <label>Email</label>
+        <input type="text" name="email" required />
+
+        <label>Comment</label>
+        <textarea name="comment" rows="5"></textarea>
+
+        <input type="submit" value="Submit" />
+    </form>
+
+    <div div sec:authorize="(hasRole('AUTHOR') and #authentication.principal.username.toLowerCase() == #vars.post.author.toLowerCase()) or hasRole('ADMIN')">
+        <a th:href="@{/posts/edit/{id} (id=${post.id})}" method="post"><button>Update the Post</button></a>
+        <a th:href="@{/posts/delete/{id} (id=${post.id})}"><button>Delete the Post</button></a>
+    </div>
+    <a th:href="@{/posts/all}">Back to List</a>
+</div>
+</body>
+</html>

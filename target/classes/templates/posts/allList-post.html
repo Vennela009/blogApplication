@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>List of Blog</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+            padding: 0;
+            text-align:center;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: calc(100% - 120px);
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            padding: 10px;
+            border: none;
+            background-color: #5cb85c;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+        button{
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        back{
+            color:white;
+            padding:10px;
+            width:200px;
+            height:40px;
+            background-color:#007bff;
+            margin:5px;
+            border-radius:5px;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1;
+            margin-top: 5px;
+        }
+        .dropdown-content div {
+            margin-bottom: 5px;
+        }
+        .dropdown-content input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .dropdown-content label {
+            margin-left: 5px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        li {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex: 1 1 calc(50% - 20px);
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .pagination {
+            margin: 20px 0;
+        }
+        .pagination a {
+            margin: 0 5px;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .pagination a:hover {
+            background-color: #0056b3;
+        }
+        .show{
+            display:block;
+        }
+        .username{
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div sec:authorize="hasAnyRole('ADMIN','AUTHOR')">
+        <a th:href="@{/posts/}">Create a Post</a>
+    </div>
+    <h1>List of Blog</h1>
+</header>
+<div sec:authorize="hasAnyRole('ADMIN','AUTHOR')">
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="LOGOUT"/>
+    </form>
+</div>
+<div  sec:authorize="hasAnyRole('ADMIN','AUTHOR')" class="username">
+    <h1>Welcome <span th:text="${#authentication.principal.username}"></span></h1>
+</div>
+<div sec:authorize="!hasAnyRole('ADMIN','AUTHOR')" class="username">
+    <h1>Welcome AnonymousUser</h1>
+</div>
+<div sec:authorize="!hasAnyRole('ADMIN','AUTHOR')">
+    <div>
+        <form th:action="@{/showLoginPage}" >
+            <label>Already Member</label>
+            <input type="submit" value="LOGIN"/>
+        </form>
+        <form th:action="@{/user/new}">
+            <label>Not a Member</label>
+            <input type="submit" value="REGISTER HERE"/>
+        </form>
+    </div>
+</div>
+<div class="container">
+    <form th:action="@{/posts/search}">
+        <input type="text" name="search" th:value="${searchQuery}" placeholder="Enter the Search Content"/>
+        <input type="submit" value="Search"/>
+    </form>
+    <label for="SortByOrder">Sort by Publish Date</label>
+    <select id="SortByOrder" name="SortByOrder" onchange="sortByChange()">
+        <option value="DESC" th:selected="${order=='DESC'}">Descending</option>
+        <option value="ASC" th:selected="${order=='ASC'}">Ascending</option>
+    </select>
+    <br><br>
+    <button onclick="toggleAuthorDropDown()">Filter by Author</button>
+    <div class="dropdown-content" id="showAuthor">
+        <div th:each="author : ${authors}">
+            <input type="checkbox" class="author-checkbox"
+                   th:checked="${authorLink!=null and authorLink.contains(author)}" th:value="${author}"/>
+            <label th:text="${author}"></label>
+        </div>
+    </div>
+
+    <button onclick="toggleTagNameDropDown()">Filter by Tag Name</button>
+    <div class="dropdown-content" id="showTagName">
+        <div th:each="tagName : ${tagNames}">
+            <input type="checkbox" class="tagName-checkbox"
+                   th:checked="${tagNameLink != null and tagNameLink.contains(tagName)}" th:value="${tagName}"/>
+            <label th:text="${tagName}"></label>
+        </div>
+    </div>
+
+    <button onclick="togglePublishedDateDropDown()">Filter by Published Date</button>
+    <input class="dropdown-content" id="showPublishedDate" type="date"/>
+
+    <button onclick="getSelectedValues()">Submit the Filter Requirement</button>
+    <a th:if="!${allList}" th:href="@{/posts/all}">Back to Home</a>
+    <ul>
+        <li th:each="post : ${posts}">
+            <h2>Title: <span th:text="${post.title}"></span></h2>
+            <p><b>Excerpt:</b> <span th:text="${post.excerpt}"></span></p>
+            <p><b>Author:</b> <span th:text="${post.author}"></span></p>
+            <p><b>Published At:</b> <span th:text="${#temporals.format(post.publishedAt,'yyyy-MM-dd HH:mm')}"></span></p>
+            <p><b>Tags:</b></p>
+            <p th:each="tag: ${post.tags}">
+                <span th:text="${tag.name}"></span>
+            </p>
+            <a th:href="@{/posts/{id}(id=${post.id})}" th:text="view"></a>
+        </li>
+    </ul>
+
+    <div>
+        <div th:if="!${filterPagination}">
+            <a th:if="${previousLink}!=null" th:href="${previousLink}">Previous</a>
+            <a th:if="${nextLink}!=null" th:href="${nextLink}">Next</a>
+        </div>
+        <div th:if="${filterPagination}">
+            <a th:if="${page>0}"
+               th:href="@{/posts/filter (author=${authorLink},tagName=${tageNameLink},publishedAt=${publishedDateLink},page=${page-1})}">Previous</a>
+            <a th:if="${totalPages != null and page< totalPages- 1}"
+               th:href="@{/posts/filter (author=${authorLink},tagName=${tageNameLink},publishedAt=${publishedDateLink},page=${page+1})}">Next</a>
+        </div>
+    </div>
+
+</div>
+<script>
+    var dropDownAuthor = document.getElementById("showAuthor");
+    var dropDownTagName = document.getElementById("showTagName");
+    var dropDownPublishedDate = document.getElementById("showPublishedDate");
+
+    function toggleAuthorDropDown(){
+        dropDownAuthor.classList.toggle("show");
+    }
+
+    function toggleTagNameDropDown(){
+        dropDownTagName.classList.toggle("show");
+    }
+
+    function togglePublishedDateDropDown(){
+        dropDownPublishedDate.classList.toggle("show");
+    }
+
+    function getSelectedValues(){
+    try {
+        var selectedAuthor = [];
+        var selectedTagName = [];
+        var selectedPublishedDate = dropDownPublishedDate.value;
+
+        document.querySelectorAll(".author-checkbox:checked").forEach(checkbox => selectedAuthor.push(checkbox.value));
+        document.querySelectorAll(".tagName-checkbox:checked").forEach(checkbox => selectedTagName.push(checkbox.value));
+
+
+
+        var url = new URL("/posts/filter", window.location.origin);
+        selectedAuthor.forEach(author => url.searchParams.append("author", encodeURIComponent(author)));
+        selectedTagName.forEach(tagName => url.searchParams.append("tagName", encodeURIComponent(tagName)));
+        if(selectedPublishedDate){
+            url.searchParams.append("publishedAt", selectedPublishedDate);
+        }
+
+        console.log("Filter URL:", url.toString());
+        window.location.href = url.toString();
+    } catch (error) {
+        console.error("Error in getSelectedValues:", error);
+        alert("An error occurred while applying filters. Please try again.");
+        }
+    }
+
+    function sortByChange(){
+        var order = document.getElementById("SortByOrder").value;
+        window.location.href = "/posts/sort/" + order;
+    }
+</script>
+</body>
+</html>
