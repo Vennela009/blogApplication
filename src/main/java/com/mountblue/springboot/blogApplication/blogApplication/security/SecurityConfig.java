@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/user/new", "/user/register", "/posts/all", "/posts/*", "/comment/*", "/posts/sort/*", "/showLoginPage").permitAll()
-                                .requestMatchers("/posts/new", "/posts/update/**", "/posts/delete/**").hasAnyRole("ADMIN", "AUTHOR")
+                                .requestMatchers("/posts/new", "/posts/update/**", "/posts/delete/**","/*/*/comment/edit/**","/*/*/comment/delete/**").hasAnyRole("ADMIN", "AUTHOR")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
