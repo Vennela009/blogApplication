@@ -20,13 +20,13 @@ public class SecurityController {
 
     @GetMapping("/showLoginPage")
     public String loginUser(){
-        return "/user/login-form";
+        return "user/login-form";
     }
 
     @GetMapping("/user/new")
     public String newRegisterForm(Model model){
         model.addAttribute("user", new User());
-        return "/user/register-form";
+        return "user/register-form";
     }
 
     @PostMapping("/user/register")
@@ -41,12 +41,12 @@ public class SecurityController {
         if(userNameSet.contains(newUserName) || emailSet.contains(newUserEmail)){
             model.addAttribute("user", new User());
             model.addAttribute("error", "Username or email is already exist.");
-            url = "/user/register-form";
+            url = "user/register-form";
 
         }else{
             securityService.newUserRegister(user);
             model.addAttribute("message","Success of your Register");
-            url ="/user/login-form";
+            url ="user/login-form";
         }
 
         return url;
