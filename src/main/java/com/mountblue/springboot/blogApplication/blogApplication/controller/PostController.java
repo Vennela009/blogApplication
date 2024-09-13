@@ -145,7 +145,7 @@ public class PostController {
         model.addAttribute("filterPagination",false);
         model.addAttribute("order",order);
 
-        return "/posts/allList-post";
+        return "posts/allList-post";
     }
 
     @GetMapping("/search")
@@ -172,7 +172,7 @@ public class PostController {
         model.addAttribute("allList",false);
         model.addAttribute("filterPagination",false);
 
-        return "/posts/allList-post";
+        return "posts/allList-post";
     }
 
     @GetMapping("/filter")
@@ -206,7 +206,7 @@ public class PostController {
         model.addAttribute("totalPages",filterPosts.getTotalPages());
         model.addAttribute("filterPagination",true);
 
-        return "/posts/allList-post";
+        return "posts/allList-post";
     }
 
     private Set<String> decodeSet(Set<String> encoded) {
