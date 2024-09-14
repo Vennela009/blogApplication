@@ -25,7 +25,7 @@ public interface PostRepository extends JpaRepository<Posts,Long> {
     @Query("Select DISTINCT p.author from Posts p ")
     Set<String> getAuthor();
 
-    @Query("Select DISTINCT t.name from Tags t ")
+    @Query("Select DISTINCT t.name from Posts p Left JOIN p.tags t ")
     Set<String> getTagName();
 
 
