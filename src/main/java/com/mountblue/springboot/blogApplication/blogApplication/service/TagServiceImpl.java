@@ -16,11 +16,9 @@ import java.util.stream.Collectors;
 @Service
 public class TagServiceImpl implements TagService{
     private  final TagRepository tagRepository;
-    private  final PostRepository postRepository;
 
-    public TagServiceImpl(TagRepository tagRepository,PostRepository postRepository){
+    public TagServiceImpl(TagRepository tagRepository){
         this.tagRepository = tagRepository;
-        this.postRepository = postRepository;
     }
 
     @Override

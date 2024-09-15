@@ -73,16 +73,10 @@
 <div class="container">
     <h1>Update the Comment</h1>
     <form th:action="@{/posts/{postId}/comment/update/{id}  (postId=${postId} ,id=${comment.id}) }" method="post">
-        <label for="name">Name</label>
-        <input type="text" name="name" id="name" th:value="${comment.name}"/>
-
-        <label for="email">Email</label>
-        <input type="text" name="email" id="email" th:value="${comment.email}"/>
-
         <label for="comment">Comment</label>
         <textarea name="comment" id="comment" rows="8" cols="10" th:text="${comment.comment}"></textarea>
 
-        <input type="submit" value="Submit"/>
+        <input type="submit" value="Update the Comment"/>
         <a th:href="@{/posts/all}" class="back-button">Back to List</a>
     </form>
 </div>

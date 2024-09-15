@@ -139,9 +139,6 @@
 </head>
 <body>
 <header>
-    <div sec:authorize="hasAnyRole('ADMIN','AUTHOR')">
-        <a th:href="@{/posts/}">Create a Post</a>
-    </div>
     <h1>List of Blog</h1>
 </header>
 <div sec:authorize="hasAnyRole('ADMIN','AUTHOR')">
@@ -154,6 +151,9 @@
 </div>
 <div sec:authorize="!hasAnyRole('ADMIN','AUTHOR')" class="username">
     <h1>Welcome AnonymousUser</h1>
+</div>
+<div sec:authorize="hasAnyRole('ADMIN','AUTHOR')">
+    <a th:href="@{/posts/}">Create a Post</a>
 </div>
 <div sec:authorize="!hasAnyRole('ADMIN','AUTHOR')">
     <div>

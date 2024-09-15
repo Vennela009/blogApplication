@@ -29,7 +29,7 @@ public class CommentController {
     }
 
     @PostMapping("/comment/{postId}")
-    public String createComment(@PathVariable Long postId, Comments comment,Model model){
+    public String saveComment(@PathVariable Long postId, Comments comment,Model model){
         comment.setCreatedAt(LocalDateTime.now());
 
         commentService.createComment(comment,postId);
@@ -68,7 +68,7 @@ public class CommentController {
 
 
     @PostMapping("/posts/{postId}/comment/update/{id}")
-    public  String updateComment(@PathVariable Long postId,@PathVariable Long id, @RequestParam("name") String name,@RequestParam("email") String email,@RequestParam("comment") String comment){
+    public  String updateComment(@PathVariable Long postId,@PathVariable Long id, @RequestParam("comment") String comment){
         commentService.updateCommentById(id, comment);
 
         return "redirect:/posts/" + postId;
