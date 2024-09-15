@@ -100,7 +100,7 @@
     <p th:text="${post.content}"></p>
 
     <h2>Author</h2>
-    <p th:text="${post.author}"></p>
+    <p th:text="${post.author.name}"></p>
 
     <h2>Published DateTime</h2>
     <p><b>Published At:</b> <span th:text="${#temporals.format(post.publishedAt,'yyyy-MM-dd HH:mm')}"></span></p>
@@ -118,7 +118,7 @@
             <p>Name: <span th:text="${comment.name}"></span></p>
             <p>Email: <span th:text="${comment.email}"></span></p>
             <p>Comment: <span th:text="${comment.comment}"></span></p>
-            <div class="comment-actions" sec:authorize="((hasRole('AUTHOR') and #authentication.principal.username.toLowerCase()==#vars.post.author.toLowerCase()) or hasRole('ADMIN'))">
+            <div class="comment-actions" sec:authorize="((hasRole('AUTHOR') and #authentication.principal.username.toLowerCase()==#vars.post.author.name.toLowerCase()) or hasRole('ADMIN'))">
                 <a th:href="@{/posts/{postId}/comment/edit/{id} (postId=${post.id},id=${comment.id})}" ><button>Update the Comment</button></a>
                 <a th:href="@{/posts/{postId}/comment/delete/{id} (postId=${post.id},id=${comment.id})}" ><button>Delete the Comment</button></a>
             </div>

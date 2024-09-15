@@ -61,7 +61,7 @@ public class CommentController {
 
     @GetMapping("/posts/{postId}/comment/delete/{id}")
     public String deleteComment(@PathVariable Long postId ,@PathVariable Long id){
-        commentService.getDeleteCommentById(id);
+        commentService.getDeleteCommentById(id,postId);
 
         return "redirect:/posts/" + postId;
     }
@@ -69,7 +69,7 @@ public class CommentController {
 
     @PostMapping("/posts/{postId}/comment/update/{id}")
     public  String updateComment(@PathVariable Long postId,@PathVariable Long id, @RequestParam("name") String name,@RequestParam("email") String email,@RequestParam("comment") String comment){
-        commentService.updateCommentById(id,name,email,comment);
+        commentService.updateCommentById(id, comment);
 
         return "redirect:/posts/" + postId;
     }

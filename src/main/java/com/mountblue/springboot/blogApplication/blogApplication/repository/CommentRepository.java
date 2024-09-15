@@ -9,7 +9,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comments, Long> {
-    @Modifying
-    @Query("DELETE FROM Comments c WHERE c.id = :id")
-    void delete(@Param("id") Long id);
 }

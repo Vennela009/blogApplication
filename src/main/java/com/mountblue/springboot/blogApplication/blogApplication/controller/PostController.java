@@ -88,6 +88,7 @@ public class PostController {
     public String getPostById(@PathVariable Long id, Model model){
         Posts post = postService.getPostById(id);
         model.addAttribute("post",post);
+        System.out.println("post = " + post.getComments());
 
         return "posts/view-post";
     }

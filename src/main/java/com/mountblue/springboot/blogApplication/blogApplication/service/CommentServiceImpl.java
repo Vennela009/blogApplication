@@ -1,7 +1,9 @@
 package com.mountblue.springboot.blogApplication.blogApplication.service;
 
 import com.mountblue.springboot.blogApplication.blogApplication.entity.Comments;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.Posts;
 import com.mountblue.springboot.blogApplication.blogApplication.repository.CommentRepository;
+import com.mountblue.springboot.blogApplication.blogApplication.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,16 +15,20 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
 
-    public CommentServiceImpl(CommentRepository commentRepository){
+    @Autowired
+    public CommentServiceImpl(CommentRepository commentRepository,PostRepository postRepository){
         this.commentRepository = commentRepository;
+        this.postRepository = postRepository;
     }
 
     @Override
     @Transactional
     public void createComment(Comments comment, Long postId){
         comment.setCreatedAt(LocalDateTime.now());
-
+        Posts post = postRepository.findById(postId).orElseThrow(()->new RuntimeException("Run Time Error"));
+        comment.setPost(post);
         commentRepository.save(comment);
     }
 
@@ -33,27 +39,26 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void getDeleteCommentById(Long id) {
-        System.out.println(id);
-        commentRepository.delete(id);
+    public void getDeleteCommentById(Long id,Long postId) {
+        commentRepository.deleteById(id);
     }
 
     @Override
+    public Comments getCommentById(Long id) {
+        return commentRepository.findById(id).orElseThrow(()-> new RuntimeException("Run Time Error"));
+    }
+
+
+    @Override
     @Transactional
-    public void updateCommentById(Long id, String name, String email, String comment) {
+    public void updateCommentById(Long id, String comment) {
         Comments existingComment = commentRepository.findById(id).orElseThrow(()->new RuntimeException("Run Time Error"));
 
-        existingComment.setName(name);
-        existingComment.setEmail(email);
         existingComment.setComment(comment);
         existingComment.setUpdatedAt(LocalDateTime.now());
 
         commentRepository.save(existingComment);
     }
 
-    @Override
-    public Comments getCommentById(Long id) {
-        return commentRepository.findById(id).orElseThrow(()->new RuntimeException("Run Time Error"));
-    }
 
 }
