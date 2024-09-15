@@ -1,7 +1,10 @@
 package com.mountblue.springboot.blogApplication.blogApplication.controller;
 import com.mountblue.springboot.blogApplication.blogApplication.entity.Posts;
 import com.mountblue.springboot.blogApplication.blogApplication.entity.Tags;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.User;
 import com.mountblue.springboot.blogApplication.blogApplication.service.PostService;
+import com.mountblue.springboot.blogApplication.blogApplication.service.SecurityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,9 +27,12 @@ import java.util.stream.Collectors;
 public class PostController {
     private static final int SIZE =10;
     private final  PostService postService;
+    private  final SecurityService securityService;
 
-    public PostController(PostService postService){
+    @Autowired
+    public PostController(PostService postService,SecurityService securityService){
         this.postService = postService;
+        this.securityService = securityService;
     }
 
     @GetMapping("/")
@@ -37,13 +43,20 @@ public class PostController {
     }
 
     @PostMapping("/new")
-    public  String createNewPost(@RequestParam("title") String title, @RequestParam("excerpt") String excerpt , @RequestParam("content") String content, @RequestParam(value = "author",required = false) String author, @RequestParam("tags") String tags){
+    public  String createNewPost(@RequestParam("title") String title, @RequestParam("excerpt") String excerpt , @RequestParam("content") String content, @RequestParam(value = "author",required = false) String author, @RequestParam("tags") String tags,Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(author==null){
-            author = authentication.getName();
+            String existingUserName  = authentication.getName();
+            author = existingUserName;
         }
-        postService.createPost(title,excerpt,content,author,tags);
-        return  "redirect:/posts/all";
+        Set<String> authorsSet = securityService.getUserName();
+        if(authorsSet.contains(author)){
+            postService.createPost(title,excerpt,content,author,tags);
+            return  "redirect:/posts/all";
+        }else{
+            model.addAttribute("error","Author is not register");
+            return "posts/create-post";
+        }
     }
 
     @GetMapping("/all")
@@ -74,7 +87,6 @@ public class PostController {
     @GetMapping("/{id}")
     public String getPostById(@PathVariable Long id, Model model){
         Posts post = postService.getPostById(id);
-
         model.addAttribute("post",post);
 
         return "posts/view-post";

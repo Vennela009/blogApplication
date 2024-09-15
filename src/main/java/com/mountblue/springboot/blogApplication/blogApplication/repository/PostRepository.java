@@ -8,31 +8,41 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Repository
 public interface PostRepository extends JpaRepository<Posts,Long> {
-    @Query("SELECT DISTINCT p FROM Posts p "+
-            "LEFT JOIN p.tags t "+
-            "WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :search,'%')) OR "+
-            "LOWER(p.content) LIKE LOWER(CONCAT('%', :search,'%')) OR "+
-            "LOWER(p.author) LIKE LOWER(CONCAT('%', :search,'%')) OR "+
-            "LOWER(t.name) LIKE LOWER(CONCAT('%', :search,'%'))"
-    )
-    Page<Posts> search(@Param("search") String search,Pageable pageable);
+    @Query("SELECT DISTINCT p FROM Posts p " +
+            "LEFT JOIN p.tags t " +
+            "LEFT JOIN p.author a " +
+            "WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
+            "LOWER(a.name) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
+            "LOWER(p.content) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
+            "LOWER(t.name) LIKE LOWER(CONCAT('%', :search, '%'))")
+    Page<Posts> search(@Param("search") String search, Pageable pageable);
 
-    @Query("Select DISTINCT p.author from Posts p ")
+
+    @Query("Select DISTINCT a.name from Posts p Left Join p.author a")
     Set<String> getAuthor();
 
-    @Query("Select DISTINCT t.name from Posts p Left JOIN p.tags t ")
+    @Query("Select DISTINCT t.name from Posts p "+
+            "Left Join p.tags  t ")
     Set<String> getTagName();
 
 
     @Query("SELECT DISTINCT p FROM Posts p " +
-            "Left JOIN p.tags t " +
-            "WHERE (:authors IS NULL OR p.author IN :authors) AND " +
+            "LEFT JOIN p.tags t " +
+            "LEFT JOIN p.author a " +
+            "WHERE (:authors IS NULL OR a.name IN :authors) AND " +
             "(:tagNames IS NULL OR t.name IN :tagNames) AND " +
-            "(:publishedDate IS NULL OR DATE(p.publishedAt) = :publishedDate)")
-    Page<Posts> getPostsByRequirement(@Param("authors") Set<String> authors, @Param("tagNames") Set<String> tagNames, @Param("publishedDate") Date publishedDate, Pageable pageable);
+            "(:publishedDate IS NULL OR FUNCTION('DATE', p.publishedAt) = :publishedDate)")
+    Page<Posts> getPostsByRequirement(@Param("authors") Set<String> authors,
+                                      @Param("tagNames") Set<String> tagNames,
+                                      @Param("publishedDate") Date publishedDate,
+                                      Pageable pageable);
+
 }

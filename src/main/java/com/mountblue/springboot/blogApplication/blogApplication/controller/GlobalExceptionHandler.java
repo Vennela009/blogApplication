@@ -1,4 +1,4 @@
-package com.mountblue.springboot.blogApplication.blogApplication.exception;
+package com.mountblue.springboot.blogApplication.blogApplication.controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;

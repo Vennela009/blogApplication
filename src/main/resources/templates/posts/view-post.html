@@ -138,7 +138,7 @@
         <input type="submit" value="Submit" />
     </form>
 
-    <div div sec:authorize="(hasRole('AUTHOR') and #authentication.principal.username.toLowerCase() == #vars.post.author.toLowerCase()) or hasRole('ADMIN')">
+    <div div sec:authorize="(hasRole('AUTHOR') and #authentication.principal.username.toLowerCase() == #vars.post.author.name.toLowerCase()) or hasRole('ADMIN')">
         <a th:href="@{/posts/edit/{id} (id=${post.id})}" method="post"><button>Update the Post</button></a>
         <a th:href="@{/posts/delete/{id} (id=${post.id})}"><button>Delete the Post</button></a>
     </div>

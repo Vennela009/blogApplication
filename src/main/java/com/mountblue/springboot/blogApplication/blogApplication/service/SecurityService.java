@@ -12,4 +12,6 @@ public interface SecurityService {
     Set<String> getUserName();
 
     Set<String> getEmail();
+
+    User getUserDetails(String name);
 }

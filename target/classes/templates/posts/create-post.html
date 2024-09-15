@@ -17,6 +17,12 @@
             padding: 10px 0;
             text-align: center;
         }
+        .error-message {
+            color: red;
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-align:center;
+        }
         .container {
             width: 60%;
             margin: 20px auto;
@@ -64,6 +70,9 @@
 <header>
     <h1>Create a Post</h1>
 </header>
+<div>
+    <p th:text="${error}" class="error-message"></p>
+</div>
 <div class="container">
     <form method="post" th:action="@{/posts/new}">
         <label for="title">Title</label>

@@ -205,7 +205,7 @@
         <li th:each="post : ${posts}">
             <h2>Title: <span th:text="${post.title}"></span></h2>
             <p><b>Excerpt:</b> <span th:text="${post.excerpt}"></span></p>
-            <p><b>Author:</b> <span th:text="${post.author}"></span></p>
+            <p><b>Author:</b> <span th:text="${post.author.name}"></span></p>
             <p><b>Published At:</b> <span th:text="${#temporals.format(post.publishedAt,'yyyy-MM-dd HH:mm')}"></span></p>
             <p><b>Tags:</b></p>
             <p th:each="tag: ${post.tags}">

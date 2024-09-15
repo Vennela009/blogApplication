@@ -35,4 +35,9 @@ public class SecurityServiceImpl implements SecurityService {
     public Set<String> getEmail() {
         return securityRepository.finalAllEmail();
     }
+
+    @Override
+    public User getUserDetails(String name) {
+        return securityRepository.findByUserName(name);
+    }
 }

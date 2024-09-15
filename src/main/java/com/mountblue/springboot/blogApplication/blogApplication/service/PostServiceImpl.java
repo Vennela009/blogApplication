@@ -2,6 +2,7 @@ package com.mountblue.springboot.blogApplication.blogApplication.service;
 
 import com.mountblue.springboot.blogApplication.blogApplication.entity.Posts;
 import com.mountblue.springboot.blogApplication.blogApplication.entity.Tags;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.User;
 import com.mountblue.springboot.blogApplication.blogApplication.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,11 +24,13 @@ import java.util.Set;
 public class PostServiceImpl implements  PostService{
     private  final PostRepository postRepository;
     private  final TagService tagService;
+    private  final  SecurityService securityService;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository,TagService tagService){
+    public PostServiceImpl(PostRepository postRepository,TagService tagService,SecurityService securityService){
         this.postRepository = postRepository;
         this.tagService = tagService;
+        this.securityService = securityService;
     }
 
     @Override
@@ -37,7 +40,8 @@ public class PostServiceImpl implements  PostService{
         post.setTitle(title);
         post.setExcerpt(excerpt);
         post.setContent(content);
-        post.setAuthor(author);
+        User existingAuthor = securityService.getUserDetails(author);
+        post.setAuthor(existingAuthor);
         post.setPublishedAt(LocalDateTime.now());
         post.setIsPublished(true);
         post.setCreatedAt(LocalDateTime.now());

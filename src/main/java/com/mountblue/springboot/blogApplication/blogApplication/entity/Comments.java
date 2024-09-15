@@ -2,6 +2,7 @@ package com.mountblue.springboot.blogApplication.blogApplication.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Table(name="comments")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Comments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +36,6 @@ public class Comments {
     @Column(name="updated_at")
     private  LocalDateTime updatedAt;
 
-    public Comments(){
-
-    }
 
     public Comments(Long id, String name, String email, String comment, Posts post, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
@@ -48,13 +47,5 @@ public class Comments {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public Posts getPostId() {
-        return post;
-    }
-
-    public void setPostId(Posts post) {
-        this.post = post;
-    }
-    
 
 }

@@ -2,6 +2,7 @@ package com.mountblue.springboot.blogApplication.blogApplication.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Table(name="tags")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Tags {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +24,6 @@ public class Tags {
 
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
-
-    public Tags(){
-
-    }
 
     public Tags(Long id, String name, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
