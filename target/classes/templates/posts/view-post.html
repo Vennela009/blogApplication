@@ -119,13 +119,13 @@
             <p>Email: <span th:text="${comment.email}"></span></p>
             <p>Comment: <span th:text="${comment.comment}"></span></p>
             <div class="comment-actions" sec:authorize="((hasRole('AUTHOR') and #authentication.principal.username.toLowerCase()==#vars.post.author.name.toLowerCase()) or hasRole('ADMIN'))">
-                <a th:href="@{/posts/{postId}/comment/edit/{id} (postId=${post.id},id=${comment.id})}" ><button>Update the Comment</button></a>
-                <a th:href="@{/posts/{postId}/comment/delete/{id} (postId=${post.id},id=${comment.id})}" ><button>Delete the Comment</button></a>
+                <a th:href="@{/posts/{postId}/comment/edit/{id} (postId=${post.id},id=${comment.id})}"><button>Update the Comment</button></a>
+                <a th:href="@{/posts/{postId}/comment/delete/{id} (postId=${post.id},id=${comment.id})}"><button>Delete the Comment</button></a>
             </div>
         </li>
     </ul>
 
-    <form th:action="@{/comment/{id} (id=${post.id})}" method="post">
+    <form th:action="@{/comment/{id} (id=${post.id})}"  method="post">
         <label>Name</label>
         <input type="text" name="name" required />
 
@@ -138,8 +138,8 @@
         <input type="submit" value="Submit" />
     </form>
 
-    <div div sec:authorize="(hasRole('AUTHOR') and #authentication.principal.username.toLowerCase() == #vars.post.author.name.toLowerCase()) or hasRole('ADMIN')">
-        <a th:href="@{/posts/edit/{id} (id=${post.id})}" method="post"><button>Update the Post</button></a>
+    <div sec:authorize="(hasRole('AUTHOR') and #authentication.principal.username.toLowerCase() == #vars.post.author.name.toLowerCase()) or hasRole('ADMIN')">
+        <a th:href="@{/posts/edit/{id} (id=${post.id})}"><button>Update the Post</button></a>
         <a th:href="@{/posts/delete/{id} (id=${post.id})}"><button>Delete the Post</button></a>
     </div>
     <a th:href="@{/posts/all}">Back to List</a>

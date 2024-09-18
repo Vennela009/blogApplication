@@ -29,14 +29,22 @@ public class CommentController {
     }
 
     @PostMapping("/comment/{postId}")
-    public String saveComment(@PathVariable Long postId, Comment comment, Model model){
-        comment.setCreatedAt(LocalDateTime.now());
+    public String saveComment(@PathVariable Long postId,
+                              @RequestParam("name") String name,
+                              @RequestParam("email") String email,
+                              @RequestParam("comment") String comment,
+                              Model model) {
+        Comment newComment = new Comment();
+        newComment.setName(name);
+        newComment.setEmail(email);
+        newComment.setComment(comment);
+        newComment.setCreatedAt(LocalDateTime.now());
 
-        commentService.createComment(comment,postId);
+        commentService.createComment(newComment, postId);
 
         Post post = postService.getPostById(postId);
 
-        model.addAttribute("post",post);
+        model.addAttribute("post", post);
         return "posts/view-post";
     }
 
