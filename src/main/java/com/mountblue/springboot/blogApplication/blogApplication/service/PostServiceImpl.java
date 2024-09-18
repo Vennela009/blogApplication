@@ -1,7 +1,7 @@
 package com.mountblue.springboot.blogApplication.blogApplication.service;
 
-import com.mountblue.springboot.blogApplication.blogApplication.entity.Posts;
-import com.mountblue.springboot.blogApplication.blogApplication.entity.Tags;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.Post;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.Tag;
 import com.mountblue.springboot.blogApplication.blogApplication.entity.User;
 import com.mountblue.springboot.blogApplication.blogApplication.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class PostServiceImpl implements  PostService{
     @Override
     @Transactional
     public void createPost(String title, String excerpt, String content, String author, String tags) {
-        Posts post = new Posts();
+        Post post = new Post();
         post.setTitle(title);
         post.setExcerpt(excerpt);
         post.setContent(content);
@@ -45,26 +45,26 @@ public class PostServiceImpl implements  PostService{
         post.setPublishedAt(LocalDateTime.now());
         post.setIsPublished(true);
         post.setCreatedAt(LocalDateTime.now());
-        Set<Tags> tagsSet = tagService.createTags(tags);
+        Set<Tag> tagsSet = tagService.createTags(tags);
         post.setTags(tagsSet);
 
         postRepository.save(post);
     }
 
     @Override
-    public Posts getPostById(Long id) {
+    public Post getPostById(Long id) {
         return postRepository.findById(id).orElseThrow(()-> new RuntimeException("Error is at run time"));
     }
 
     @Override
     @Transactional
     public void updatePostById(Long id, String title, String content ,String tags) {
-        Posts existingPost = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Error is occurred at updating the details"));
+        Post existingPost = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Error is occurred at updating the details"));
 
         existingPost.setTitle(title);
         existingPost.setContent(content);
         existingPost.setUpdatedAt(LocalDateTime.now());
-        Set<Tags> tagsSet = tagService.createTags(tags);
+        Set<Tag> tagsSet = tagService.createTags(tags);
         existingPost.setTags(tagsSet);
 
         postRepository.save(existingPost);
@@ -77,7 +77,7 @@ public class PostServiceImpl implements  PostService{
     }
 
     @Override
-    public Page<Posts> getAllPostBySort(String order,Pageable pageable) {
+    public Page<Post> getAllPostBySort(String order,Pageable pageable) {
         Sort.Direction direction = order.equals("ASC")?Sort.Direction.ASC: Sort.Direction.DESC;
         Sort sort = Sort.by(direction,"publishedAt");
 
@@ -87,12 +87,12 @@ public class PostServiceImpl implements  PostService{
     }
 
     @Override
-    public Page<Posts> getSearchContent(String search,Pageable pageable) {
+    public Page<Post> getSearchContent(String search,Pageable pageable) {
         return  postRepository.search(search,pageable);
     }
 
     @Override
-    public Page<Posts> getAllPostByPagination(Pageable pageable) {
+    public Page<Post> getAllPostByPagination(Pageable pageable) {
         Sort sort = Sort.by(Sort.Direction.DESC,"publishedAt");
 
         Pageable sortedAndPaged = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),sort);
@@ -111,7 +111,7 @@ public class PostServiceImpl implements  PostService{
     }
 
     @Override
-    public Page<Posts> getPostsByFilter(Set<String> authors, Set<String> tagNames, LocalDate publishedDate, Pageable pageable) {
+    public Page<Post> getPostsByFilter(Set<String> authors, Set<String> tagNames, LocalDate publishedDate, Pageable pageable) {
         Date date = null;
 
         if (publishedDate != null) {
@@ -125,7 +125,7 @@ public class PostServiceImpl implements  PostService{
     }
 
     @Override
-    public List<Posts> getAllPost() {
+    public List<Post> getAllPost() {
         return postRepository.findAll();
     }
 

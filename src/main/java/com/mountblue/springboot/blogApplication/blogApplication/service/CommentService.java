@@ -1,19 +1,19 @@
 package com.mountblue.springboot.blogApplication.blogApplication.service;
 
-import com.mountblue.springboot.blogApplication.blogApplication.entity.Comments;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.Comment;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface CommentService {
-    void createComment(Comments comment, Long postId);
+    void createComment(Comment comment, Long postId);
 
-    List<Comments> getAllCommentList();
+    List<Comment> getAllCommentList();
 
     void getDeleteCommentById(Long id,Long postId);
 
-    Comments getCommentById(Long id);
+    Comment getCommentById(Long id);
 
     void updateCommentById(Long id, String comment);
 }

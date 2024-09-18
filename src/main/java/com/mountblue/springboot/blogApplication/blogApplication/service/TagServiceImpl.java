@@ -1,7 +1,7 @@
 package com.mountblue.springboot.blogApplication.blogApplication.service;
 
-import com.mountblue.springboot.blogApplication.blogApplication.entity.Posts;
-import com.mountblue.springboot.blogApplication.blogApplication.entity.Tags;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.Post;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.Tag;
 import com.mountblue.springboot.blogApplication.blogApplication.repository.PostRepository;
 import com.mountblue.springboot.blogApplication.blogApplication.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +22,13 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
-    public Set<Tags> createTags(String tags) {
-        Set<Tags> tagSet = new HashSet<>();
+    public Set<Tag> createTags(String tags) {
+        Set<Tag> tagSet = new HashSet<>();
 
         String[] tagNames = tags.split(",");
 
         for(String tagName : tagNames){
-            Tags newTag = new Tags();
+            Tag newTag = new Tag();
             newTag.setName(tagName);
             newTag.setCreatedAt(LocalDateTime.now());
             tagRepository.save(newTag);

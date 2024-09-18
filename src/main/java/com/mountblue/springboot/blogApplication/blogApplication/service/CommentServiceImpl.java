@@ -1,7 +1,7 @@
 package com.mountblue.springboot.blogApplication.blogApplication.service;
 
-import com.mountblue.springboot.blogApplication.blogApplication.entity.Comments;
-import com.mountblue.springboot.blogApplication.blogApplication.entity.Posts;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.Comment;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.Post;
 import com.mountblue.springboot.blogApplication.blogApplication.repository.CommentRepository;
 import com.mountblue.springboot.blogApplication.blogApplication.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +25,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void createComment(Comments comment, Long postId){
+    public void createComment(Comment comment, Long postId){
         comment.setCreatedAt(LocalDateTime.now());
-        Posts post = postRepository.findById(postId).orElseThrow(()->new RuntimeException("Run Time Error"));
+        Post post = postRepository.findById(postId).orElseThrow(()->new RuntimeException("Run Time Error"));
         comment.setPost(post);
         commentRepository.save(comment);
     }
 
     @Override
-    public List<Comments> getAllCommentList() {
+    public List<Comment> getAllCommentList() {
         return commentRepository.findAll();
     }
 
@@ -44,7 +44,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comments getCommentById(Long id) {
+    public Comment getCommentById(Long id) {
         return commentRepository.findById(id).orElseThrow(()-> new RuntimeException("Run Time Error"));
     }
 
@@ -52,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void updateCommentById(Long id, String comment) {
-        Comments existingComment = commentRepository.findById(id).orElseThrow(()->new RuntimeException("Run Time Error"));
+        Comment existingComment = commentRepository.findById(id).orElseThrow(()->new RuntimeException("Run Time Error"));
 
         existingComment.setComment(comment);
         existingComment.setUpdatedAt(LocalDateTime.now());

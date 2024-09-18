@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Posts {
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -46,17 +46,17 @@ public class Posts {
     private  LocalDateTime updatedAt;
 
     @OneToMany(mappedBy="post", cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.EAGER)
-    private List<Comments> comments;
+    private List<Comment> comments;
 
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.EAGER)
     @JoinTable(name="post_tags",
             joinColumns = @JoinColumn(name="post_id"),
             inverseJoinColumns = @JoinColumn(name="tag_id"))
-    private Set<Tags> tags = new HashSet<>();
+    private Set<Tag> tags = new HashSet<>();
 
 
 
-    public Posts(Long id, String title, String excerpt, String content, User author, LocalDateTime publishedAt, Boolean isPublished, LocalDateTime createdAt, LocalDateTime updatedAt, List<Comments> comments, Set<Tags> tags) {
+    public Post(Long id, String title, String excerpt, String content, User author, LocalDateTime publishedAt, Boolean isPublished, LocalDateTime createdAt, LocalDateTime updatedAt, List<Comment> comments, Set<Tag> tags) {
         this.id = id;
         this.title = title;
         this.excerpt = excerpt;

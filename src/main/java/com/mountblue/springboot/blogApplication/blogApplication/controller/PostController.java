@@ -1,6 +1,6 @@
 package com.mountblue.springboot.blogApplication.blogApplication.controller;
-import com.mountblue.springboot.blogApplication.blogApplication.entity.Posts;
-import com.mountblue.springboot.blogApplication.blogApplication.entity.Tags;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.Post;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.Tag;
 import com.mountblue.springboot.blogApplication.blogApplication.entity.User;
 import com.mountblue.springboot.blogApplication.blogApplication.service.PostService;
 import com.mountblue.springboot.blogApplication.blogApplication.service.SecurityService;
@@ -37,7 +37,7 @@ public class PostController {
 
     @GetMapping("/")
     public  String showCreatePostForm(Model model){
-        model.addAttribute("post",new Posts());
+        model.addAttribute("post",new Post());
 
         return "posts/create-post";
     }
@@ -62,7 +62,7 @@ public class PostController {
     @GetMapping("/all")
     public  String getAllPost(@RequestParam(name="page",defaultValue = "0") int page , Model model){
         Pageable pageable = PageRequest.of(page,SIZE);
-        Page<Posts> pagePosts = postService.getAllPostByPagination(pageable);
+        Page<Post> pagePosts = postService.getAllPostByPagination(pageable);
 
         Set<String> authorSet = postService.findAllAuthor();
         Set<String> tagNameSet = postService.findAllTagName();
@@ -86,7 +86,7 @@ public class PostController {
 
     @GetMapping("/{id}")
     public String getPostById(@PathVariable Long id, Model model){
-        Posts post = postService.getPostById(id);
+        Post post = postService.getPostById(id);
         model.addAttribute("post",post);
         System.out.println("post = " + post.getComments());
 
@@ -95,10 +95,10 @@ public class PostController {
 
     @GetMapping("/edit/{id}")
     public String getPostDetails(@PathVariable Long id,Model model){
-        Posts post = postService.getPostById(id);
+        Post post = postService.getPostById(id);
 
         String tags = "";
-        for(Tags each: post.getTags()){
+        for(Tag each: post.getTags()){
             tags += each.getName() + ",";
         };
 
@@ -116,7 +116,7 @@ public class PostController {
         postService.updatePostById(id,title,content,tags);
 
         System.out.println("hi");
-        Posts updatePost = postService.getPostById(id);
+        Post updatePost = postService.getPostById(id);
 
         model.addAttribute("post",updatePost);
 
@@ -128,7 +128,7 @@ public class PostController {
     public String deletePost(@PathVariable Long id,Model model){
         postService.deletePostById(id);
         
-        List<Posts> posts = postService.getAllPost();
+        List<Post> posts = postService.getAllPost();
 
         model.addAttribute("posts",posts);
 
@@ -138,7 +138,7 @@ public class PostController {
     @GetMapping("/sort/{order}")
     public String sortOrderOfPosts(@PathVariable String order,@RequestParam(value="page" , defaultValue = "0") int page,Model model){
         Pageable pageable = PageRequest.of(page,SIZE);
-        Page<Posts> orderPagePost = postService.getAllPostBySort(order,pageable);
+        Page<Post> orderPagePost = postService.getAllPostBySort(order,pageable);
 
         Set<String> authorSet = postService.findAllAuthor();
         Set<String> tagNameSet = postService.findAllTagName();
@@ -164,7 +164,7 @@ public class PostController {
     @GetMapping("/search")
     public String searchByRequirement(@RequestParam("search") String search, @RequestParam(value="page",defaultValue = "0") int page,Model model){
         Pageable pageable = PageRequest.of(page,SIZE);
-        Page<Posts> allPostsFromSearch = postService.getSearchContent(search,pageable);
+        Page<Post> allPostsFromSearch = postService.getSearchContent(search,pageable);
 
         String previousLink =  page>0? "/posts/search?search="+search+ "&page=" + (page-1)+"&limit=10" : null;
         String nextLink = page<(allPostsFromSearch.getTotalPages()-1)?"/posts/search?search="+search+"&page="+(page+1)+"&limit=10":null;
@@ -191,7 +191,7 @@ public class PostController {
     @GetMapping("/filter")
     public String filterByAuthorAndTagName(@RequestParam(value="page",defaultValue = "0") int page, @RequestParam(value="author", required = false) Set<String> authors, @RequestParam(value="tagName",required = false) Set<String> tagNames, @RequestParam(value = "publishedAt",required = false) LocalDate publishedDate, Model model ){
         Pageable pageable = PageRequest.of(page,SIZE);
-        Page<Posts> filterPosts;
+        Page<Post> filterPosts;
 
         Set<String> decodedAuthors = decodeSet(authors);
         Set<String> decodedTagName = decodeSet(tagNames);

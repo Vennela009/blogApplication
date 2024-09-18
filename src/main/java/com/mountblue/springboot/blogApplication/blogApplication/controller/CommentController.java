@@ -1,7 +1,7 @@
 package com.mountblue.springboot.blogApplication.blogApplication.controller;
 
-import com.mountblue.springboot.blogApplication.blogApplication.entity.Comments;
-import com.mountblue.springboot.blogApplication.blogApplication.entity.Posts;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.Comment;
+import com.mountblue.springboot.blogApplication.blogApplication.entity.Post;
 import com.mountblue.springboot.blogApplication.blogApplication.service.CommentService;
 import com.mountblue.springboot.blogApplication.blogApplication.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,21 +29,20 @@ public class CommentController {
     }
 
     @PostMapping("/comment/{postId}")
-    public String saveComment(@PathVariable Long postId, Comments comment,Model model){
+    public String saveComment(@PathVariable Long postId, Comment comment, Model model){
         comment.setCreatedAt(LocalDateTime.now());
 
         commentService.createComment(comment,postId);
 
-        Posts post = postService.getPostById(postId);
+        Post post = postService.getPostById(postId);
 
         model.addAttribute("post",post);
-
         return "posts/view-post";
     }
 
     @GetMapping("/comments")
     public String displayComments(Model model){
-        List<Comments> comments = commentService.getAllCommentList();
+        List<Comment> comments = commentService.getAllCommentList();
 
         model.addAttribute("comments", comments);
 
@@ -52,7 +51,7 @@ public class CommentController {
 
     @GetMapping("/posts/{postId}/comment/edit/{id}")
     public  String displayUpdateHtml(@PathVariable Long postId,@PathVariable Long id, Model model){
-        Comments comment = commentService.getCommentById(id);
+        Comment comment = commentService.getCommentById(id);
 
         model.addAttribute("comment",comment);
         model.addAttribute("postId",postId);
