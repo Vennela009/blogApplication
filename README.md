@@ -143,7 +143,7 @@ This is a Blog Application built using **Spring MVC**, **Spring Data JPA**, **Th
 │               └── mountblue
 │                   └── blogApplication
 │                       └── BlogApplicationTests.java
-
+```
 ---
 
 # Technologies Used
@@ -170,3 +170,4 @@ This is a Blog Application built using **Spring MVC**, **Spring Data JPA**, **Th
 ```bash
 git clone https://github.com/yourusername/blogapplication.git
 cd blogapplication
+
