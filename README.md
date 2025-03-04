@@ -144,6 +144,8 @@ This is a Blog Application built using **Spring MVC**, **Spring Data JPA**, **Th
 │                   └── blogApplication
 │                       └── BlogApplicationTests.java
 
+---
+
 # Technologies Used
 
 - **Java 17**
