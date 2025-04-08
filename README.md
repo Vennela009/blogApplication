@@ -98,7 +98,7 @@ This is a Blog Application built using **Spring MVC**, **Spring Data JPA**, **Th
 │   ├── main
 │   │   ├── java
 │   │   │   └── com
-│   │   │       └── mountblue
+│   │   │       └── vennela009
 │   │   │           └── blogApplication
 │   │   │               ├── BlogApplication.java
 │   │   │               ├── controller
@@ -140,9 +140,10 @@ This is a Blog Application built using **Spring MVC**, **Spring Data JPA**, **Th
 │   └── test
 │       └── java
 │           └── com
-│               └── mountblue
+│               └── vennela009
 │                   └── blogApplication
 │                       └── BlogApplicationTests.java
+
 ```
 ---
 
